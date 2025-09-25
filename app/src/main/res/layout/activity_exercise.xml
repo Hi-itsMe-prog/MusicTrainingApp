@@ -18,41 +18,9 @@
         android:gravity="center"
         android:layout_marginBottom="24dp" />
 
-    <!-- Рекомендация -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/cards"
-        android:padding="16dp"
-        android:layout_marginBottom="24dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Рекомендация"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#3F51B5"
-            android:layout_marginBottom="8dp" />
 
-        <TextView
-            android:id="@+id/tvRecommendation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Сегодня рекомендуем повторить интервалы"
-            android:textSize="14sp" />
 
-    </LinearLayout>
-
-    <!-- Список упражнений -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Все упражнения"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="16dp" />
 
     <!-- Интервалы -->
     <LinearLayout

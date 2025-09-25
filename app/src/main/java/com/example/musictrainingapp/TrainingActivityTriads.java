@@ -1,5 +1,7 @@
 package com.example.musictrainingapp;
 
+import static android.content.Intent.getIntent;
+
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
