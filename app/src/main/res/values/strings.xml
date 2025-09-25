@@ -1,0 +1,28 @@
+<resources>
+
+    <!-- Типы упражнений (для кода) -->
+    <string name="exercise_type_intervals" translatable="false">intervals</string>
+    <string name="exercise_type_chords" translatable="false">chords</string>
+    <string name="exercise_type_seventh_chords" translatable="false">seventh_chords</string>
+    <string name="exercise_type_ninth_chords" translatable="false">ninth_chords</string>
+    <string name="exercise_type_dictionary" translatable="false">dictionary</string>
+
+    <!-- Названия упражнений (для отображения) -->
+    <string name="exercise_name_intervals">Интервалы</string>
+    <string name="exercise_name_chords">Трезвучия</string>
+    <string name="exercise_name_seventh_chords">Септаккорды</string>
+    <string name="exercise_name_ninth_chords">Нонаккорды</string>
+    <string name="exercise_name_dictionary">Словарь терминов</string>
+
+    <!-- Тексты прогресса -->
+    <string name="progress_accuracy">Точность: %d%%</string>
+    <string name="progress_studied">Изучено: %d%%</string>
+
+    <!-- Рекомендации -->
+    <string name="recommendation_title">Рекомендация</string>
+    <string name="recommendation_default">Сегодня рекомендуем повторить интервалы. Это основа музыкальной теории!</string>
+
+    <!-- Заголовки -->
+    <string name="title_exercises">Все упражнения</string>
+    <string name="title_choose_exercise">Выберите упражнение</string>
+</resources>

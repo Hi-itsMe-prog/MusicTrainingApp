@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="#E3F2FD"
+    android:gravity="center">
+
+    <!-- Заголовок -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Результаты упражнения"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#3F51B5"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Счет -->
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0/0"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#2196F3"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Процент правильных ответов -->
+    <TextView
+        android:id="@+id/tvPercentage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0%"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:textColor="#757575"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Сообщение с результатом -->
+    <TextView
+        android:id="@+id/tvResultMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="#424242"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Кнопки -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="32dp">
+
+        <Button
+            android:id="@+id/btnRestart"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Повторить"
+            android:backgroundTint="#3F51B5"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnMainMenu"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Главное меню"
+            android:backgroundTint="#9E9E9E"
+            android:textColor="@android:color/white" />
+
+    </LinearLayout>
+
+    <!-- Детализация -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/cards"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Детализация:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#3F51B5"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvMistakes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ошибок: 0"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvCorrectAnswers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Правильных ответов: 0"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

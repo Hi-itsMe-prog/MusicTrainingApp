@@ -1,0 +1,28 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+
+    <!-- Фон -->
+    <path
+        android:fillColor="#2D3436"
+        android:pathData="M0,0h96v96h-96z"/>
+
+    <!-- Волны звука -->
+    <path
+        android:fillColor="#FD79A8"
+        android:pathData="M20,40q10,-8 20,0 10,8 20,0 10,-8 20,0v4q-10,8 -20,0 -10,-8 -20,0 -10,8 -20,0v-4z"/>
+
+    <path
+        android:fillColor="#74B9FF"
+        android:pathData="M20,50q12,-10 24,0 12,10 24,0 12,-10 24,0v4q-12,10 -24,0 -12,-10 -24,0 -12,10 -24,0v-4z"/>
+
+    <path
+        android:fillColor="#55EFC4"
+        android:pathData="M20,60q14,-12 28,0 14,12 28,0 14,-12 28,0v4q-14,12 -28,0 -14,-12 -28,0 -14,12 -28,0v-4z"/>
+
+    <!-- Восьмые ноты -->
+
+
+</vector>
