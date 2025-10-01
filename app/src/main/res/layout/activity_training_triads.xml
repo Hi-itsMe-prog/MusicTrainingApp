@@ -1,49 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E3F2FD"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#F5F5F5">
+    android:padding="16dp">
 
     <!-- Заголовок -->
     <TextView
         android:id="@+id/tvExerciseTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:text="Интервалы"
         android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginBottom="16dp"/>
+        android:textStyle="bold" />
 
     <!-- Задание -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/cards"
-        android:padding="16dp"
-        android:layout_marginBottom="16dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/tvQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="Постройте тоническое трезвучие до мажора"
             android:textSize="18sp"
-            android:gravity="center"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvSelectedNotes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Выбрано: "
-            android:textSize="14sp"
+            android:layout_marginTop="8dp"
             android:gravity="center"
-            android:layout_marginTop="8dp"/>
+            android:text="Выбрано: "
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -53,14 +52,14 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginBottom="16dp"
-        android:background="#E0E0E0"/>
+        android:background="#E0E0E0" />
 
     <!-- Управление -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnPlaySound"
@@ -96,9 +95,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
-        android:layout_marginTop="16dp">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tvProgress"
@@ -106,24 +105,23 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Вопрос 1/10"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tvScore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="Счёт: 0"
-            android:textSize="14sp"
-            android:gravity="center"/>
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Далее"
-            android:enabled="false"/>
-
+            android:enabled="false"
+            android:text="Далее" />
 
 
     </LinearLayout>

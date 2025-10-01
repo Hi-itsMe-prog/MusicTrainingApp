@@ -133,108 +133,21 @@
     </LinearLayout>
 
     <!-- Основные карточки -->
-    <LinearLayout
+    <com.example.musictrainingapp.CustomButt1
         android:id="@+id/cardExercises"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:background="@drawable/cards"
-        android:padding="16dp"
-        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:clickable="true"
-        android:focusable="true">
+        app:icon="@android:drawable/ic_btn_speak_now"
+        app:title="Упражнения"
+        app:iconTint="#3F51B5" />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@android:drawable/ic_btn_speak_now"
-            app:tint="#3F51B5" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Упражнения"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="16dp" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@android:drawable/ic_media_next"
-            app:tint="#9E9E9E" />
-
-    </LinearLayout>
-
-    <LinearLayout
+    <com.example.musictrainingapp.CustomButt1
         android:id="@+id/cardDictionary"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:background="@drawable/cards"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="12dp"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@android:drawable/ic_menu_agenda"
-            app:tint="#3F51B5" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Словарь терминов"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="16dp" />
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@android:drawable/ic_media_next"
-            app:tint="#9E9E9E" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/cardStatistics"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:orientation="horizontal"
-        android:background="@drawable/cards"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@android:drawable/ic_menu_info_details"
-            app:tint="#3F51B5" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Статистика"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="16dp"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@android:drawable/ic_media_next"
-            app:tint="#9E9E9E" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        app:icon="@android:drawable/ic_menu_agenda"
+        app:title="Словарь терминов"
+        app:iconTint="#3F51B5" />
 
 </LinearLayout>

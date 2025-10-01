@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvWelcome, tvProgress, tvTotalExercises, tvAccuracy;
     private ProgressBar progressBar;
     private ImageButton btnProfile;
-    private View cardExercises, cardDictionary, cardStatistics;
+    private CustomButt1 cardExercises, cardDictionary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
         tvAccuracy = findViewById(R.id.tvAccuracy);
         progressBar = findViewById(R.id.progressBar);
         btnProfile = findViewById(R.id.btnProfile);
+
         cardExercises = findViewById(R.id.cardExercises);
         cardDictionary = findViewById(R.id.cardDictionary);
-        cardStatistics = findViewById(R.id.cardStatistics);
     }
 
     private void loadUserData() {
@@ -51,10 +51,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        btnProfile.setOnClickListener(v -> openProfile());
-        cardExercises.setOnClickListener(v -> openExerciseActivity());
-        cardDictionary.setOnClickListener(v -> openDictionaryActivity());
-        cardStatistics.setOnClickListener(v -> openStatisticsActivity());
+        btnProfile.setOnClickListener(v -> {
+            System.out.println("=== Profile button CLICKED ===");
+            openProfile();
+        });
+
+        if (cardExercises != null) {
+            cardExercises.setOnClickListener(v -> {
+                System.out.println("=== Exercises card CLICKED ===");
+                openExerciseActivity();
+            });
+        } else {
+            System.out.println("=== Exercises card is NULL ===");
+        }
+
+        if (cardDictionary != null) {
+            cardDictionary.setOnClickListener(v -> {
+                System.out.println("=== Dictionary card CLICKED ===");
+                openDictionaryActivity();
+            });
+        } else {
+            System.out.println("=== Dictionary card is NULL ===");
+        }
     }
 
     private void openExerciseActivity() {
@@ -68,14 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openDictionaryActivity() {
-        // Временная заглушка
-        Intent intent = new Intent(this, ExerciseActivity.class);
-        startActivity(intent);
-    }
-
-    private void openStatisticsActivity() {
-        // Временная заглушка
-        Intent intent = new Intent(this, ExerciseActivity.class);
+        Intent intent = new Intent(this, DictionaryActivity.class);
         startActivity(intent);
     }
 }
