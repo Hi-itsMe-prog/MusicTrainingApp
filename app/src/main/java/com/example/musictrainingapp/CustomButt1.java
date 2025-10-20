@@ -27,6 +27,13 @@ public class CustomButt1 extends LinearLayout {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        // Устанавливаем ориентацию и другие свойства КОРНЕВОГО layout
+        setOrientation(LinearLayout.HORIZONTAL);
+        setClickable(true);
+        setFocusable(true);
+        setBackgroundResource(R.drawable.cards);
+
+        // Inflate layout
         LayoutInflater.from(context).inflate(R.layout.custom_butt1, this, true);
 
         iconView = findViewById(R.id.icon);

@@ -27,7 +27,7 @@
             android:name=".ResultsActivity"
             android:exported="false" />
         <activity
-            android:name=".TrainingActivity"
+            android:name=".TrainingIntervalsActivity"
             android:exported="false" />
         <activity
             android:name=".ExerciseActivity"

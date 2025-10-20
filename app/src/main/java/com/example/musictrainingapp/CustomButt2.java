@@ -14,7 +14,6 @@ public class CustomButt2 extends LinearLayout {
     private TextView titleView;
     private TextView subtitleView;
 
-
     public CustomButt2(Context context) {
         this(context, null);
     }
@@ -29,13 +28,20 @@ public class CustomButt2 extends LinearLayout {
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        // Устанавливаем свойства КОРНЕВОГО layout
+        setOrientation(LinearLayout.HORIZONTAL);
+        setClickable(true);
+        setFocusable(true);
+        setBackgroundResource(R.drawable.cards);
+
+        // Inflate layout
         LayoutInflater.from(context).inflate(R.layout.custom_butt2, this, true);
 
         iconView = findViewById(R.id.icon);
         titleView = findViewById(R.id.title);
         subtitleView = findViewById(R.id.subtitle);
 
-
+        // Чтение кастомных атрибутов
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(
                     attrs,
@@ -43,11 +49,6 @@ public class CustomButt2 extends LinearLayout {
                     defStyleAttr,
                     0
             );
-
-
-            setClickable(true);
-            setFocusable(true);
-            setBackgroundResource(R.drawable.cards);
 
             try {
                 int icon = typedArray.getResourceId(R.styleable.CustomButt2_icon, 0);
@@ -91,13 +92,5 @@ public class CustomButt2 extends LinearLayout {
 
     public void setIconTint(int color) {
         iconView.setColorFilter(color);
-    }
-
-    public void setProgress(String progress) {
-        subtitleView.setText("Точность: " + progress);
-    }
-
-    public void setStudyProgress(String progress) {
-        subtitleView.setText("Изучено: " + progress);
     }
 }

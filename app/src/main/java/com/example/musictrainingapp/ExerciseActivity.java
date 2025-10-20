@@ -81,7 +81,7 @@ public class ExerciseActivity extends AppCompatActivity {
         if (cardId == R.id.cardIntervals) {
             exerciseType = "intervals";
             exerciseName = "Интервалы";
-            intent = new Intent(this, TrainingActivity.class);
+            intent = new Intent(this, TrainingIntervalsActivity.class);
         }
         else if (cardId == R.id.cardChords) {
             exerciseType = "chords";
@@ -103,7 +103,7 @@ public class ExerciseActivity extends AppCompatActivity {
             exerciseName = "Словарь терминов";
             intent = new Intent(this, DictionaryActivity.class);
         } else {
-            intent = new Intent(this, TrainingActivity.class);
+            intent = new Intent(this, TrainingIntervalsActivity.class);
         }
 
         intent.putExtra("exercise_type", exerciseType);
@@ -115,11 +115,5 @@ public class ExerciseActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         finish();
         return true;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadExerciseData(); // Обновляем прогресс при возвращении на экран
     }
 }

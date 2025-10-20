@@ -2,38 +2,44 @@ package com.example.musictrainingapp;
 
 public class MusicTerm {
     private int id;
-    private String foreignTerm;
-    private String russianTranslation;
-    private String description;
-    private boolean isStudied;
+    private String term;
+    private String language;
+    private String transcription;
+    private String meaning;
     private String category;
 
     public MusicTerm() {}
 
-    public MusicTerm(String foreignTerm, String russianTranslation, String description, String category) {
-        this.foreignTerm = foreignTerm;
-        this.russianTranslation = russianTranslation;
-        this.description = description;
+    public MusicTerm(int id, String term, String language, String transcription, String meaning, String category) {
+        this.id = id;
+        this.term = term;
+        this.language = language;
+        this.transcription = transcription;
+        this.meaning = meaning;
         this.category = category;
-        this.isStudied = false;
     }
 
-    // Геттеры и сеттеры
+    // Getters and Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public String getForeignTerm() { return foreignTerm; }
-    public void setForeignTerm(String foreignTerm) { this.foreignTerm = foreignTerm; }
+    public String getTerm() { return term; }
+    public void setTerm(String term) { this.term = term; }
 
-    public String getRussianTranslation() { return russianTranslation; }
-    public void setRussianTranslation(String russianTranslation) { this.russianTranslation = russianTranslation; }
+    public String getLanguage() { return language; }
+    public void setLanguage(String language) { this.language = language; }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getTranscription() { return transcription; }
+    public void setTranscription(String transcription) { this.transcription = transcription; }
 
-    public boolean isStudied() { return isStudied; }
-    public void setStudied(boolean studied) { isStudied = studied; }
+    public String getMeaning() { return meaning; }
+    public void setMeaning(String meaning) { this.meaning = meaning; }
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+
+    @Override
+    public String toString() {
+        return term + " - " + meaning;
+    }
 }

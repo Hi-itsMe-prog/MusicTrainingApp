@@ -1,6 +1,8 @@
 package com.example.musictrainingapp;
 
 import android.os.Bundle;
+import android.widget.ListView;
+import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class DictionaryActivity extends AppCompatActivity {
+
+    private DatabaseHelper dbHelper;
+    private ListView listView;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

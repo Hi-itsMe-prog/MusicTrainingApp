@@ -73,7 +73,7 @@ public class ResultsActivity extends AppCompatActivity {
 
     private void restartExercise() {
         Intent intent = getIntent();
-        Intent newIntent = new Intent(this, TrainingActivity.class);
+        Intent newIntent = new Intent(this, TrainingIntervalsActivity.class);
         newIntent.putExtra("exercise_type", intent.getStringExtra("exercise_type"));
         newIntent.putExtra("exercise_name", getExerciseName(intent.getStringExtra("exercise_type")));
         startActivity(newIntent);

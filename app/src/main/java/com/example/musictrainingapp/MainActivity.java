@@ -9,7 +9,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
-
     private TextView tvWelcome, tvProgress, tvTotalExercises, tvAccuracy;
     private ProgressBar progressBar;
     private ImageButton btnProfile;
@@ -38,40 +37,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        String username = "Алексей";
+        String username = getString(R.string.default_username);
         int progress = 45;
         int totalExercises = 27;
         int accuracy = 78;
 
-        tvWelcome.setText("Добро пожаловать, " + username + "!");
-        tvProgress.setText(progress + "%");
+        tvWelcome.setText(getString(R.string.welcome_message, username));
+        tvProgress.setText(getString(R.string.progress_percent, progress));
+        tvAccuracy.setText(getString(R.string.accuracy_percent, accuracy));
         progressBar.setProgress(progress);
-        tvTotalExercises.setText(String.valueOf(totalExercises));
-        tvAccuracy.setText(accuracy + "%");
+        tvTotalExercises.setText(getString(R.string.total_exercises_count, totalExercises));
     }
 
     private void setupClickListeners() {
         btnProfile.setOnClickListener(v -> {
-            System.out.println("=== Profile button CLICKED ===");
+            System.out.println(getString(R.string.debug_profile_clicked));
             openProfile();
         });
 
         if (cardExercises != null) {
             cardExercises.setOnClickListener(v -> {
-                System.out.println("=== Exercises card CLICKED ===");
+                System.out.println(getString(R.string.debug_exercises_clicked));
                 openExerciseActivity();
             });
         } else {
-            System.out.println("=== Exercises card is NULL ===");
+            System.out.println(getString(R.string.debug_card_null, "Exercises"));
         }
 
         if (cardDictionary != null) {
             cardDictionary.setOnClickListener(v -> {
-                System.out.println("=== Dictionary card CLICKED ===");
+                System.out.println(getString(R.string.debug_dictionary_clicked));
                 openDictionaryActivity();
             });
         } else {
-            System.out.println("=== Dictionary card is NULL ===");
+            System.out.println(getString(R.string.debug_card_null, "Dictionary"));
         }
     }
 
