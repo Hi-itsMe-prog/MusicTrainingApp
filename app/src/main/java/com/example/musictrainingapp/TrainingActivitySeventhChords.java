@@ -2,7 +2,7 @@ package com.example.musictrainingapp;
 
 import java.util.*;
 
-public class TrainingActivitySeventhChords extends BaseTrainingActivity {
+public abstract class TrainingActivitySeventhChords extends BaseTrainingActivity {
 
     private final String[] chordTypes = {"major7", "minor7", "dominant7", "half-diminished7", "diminished7"};
     private final String[] inversions = {"основное", "первое обращение", "второе обращение", "третье обращение"};

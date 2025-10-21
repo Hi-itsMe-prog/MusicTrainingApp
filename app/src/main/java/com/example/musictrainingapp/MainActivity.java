@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setupClickListeners();
     }
 
+    // тут ищем компоненты по id
     private void findViews() {
         tvWelcome = findViewById(R.id.tvWelcome);
         tvProgress = findViewById(R.id.tvProgress);
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         cardDictionary = findViewById(R.id.cardDictionary);
     }
 
+    // тут будет взаимодействие с БД
     private void loadUserData() {
         String username = getString(R.string.default_username);
         int progress = 45;
@@ -49,16 +51,19 @@ public class MainActivity extends AppCompatActivity {
         tvTotalExercises.setText(getString(R.string.total_exercises_count, totalExercises));
     }
 
+    // кнопки для перехода в другие активити
     private void setupClickListeners() {
         btnProfile.setOnClickListener(v -> {
             System.out.println(getString(R.string.debug_profile_clicked));
-            openProfile();
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
         });
 
         if (cardExercises != null) {
             cardExercises.setOnClickListener(v -> {
                 System.out.println(getString(R.string.debug_exercises_clicked));
-                openExerciseActivity();
+                Intent intent = new Intent(this, ExerciseActivity.class);
+                startActivity(intent);
             });
         } else {
             System.out.println(getString(R.string.debug_card_null, "Exercises"));
@@ -67,25 +72,11 @@ public class MainActivity extends AppCompatActivity {
         if (cardDictionary != null) {
             cardDictionary.setOnClickListener(v -> {
                 System.out.println(getString(R.string.debug_dictionary_clicked));
-                openDictionaryActivity();
+                Intent intent = new Intent(this, DictionaryActivity.class);
+                startActivity(intent);
             });
         } else {
             System.out.println(getString(R.string.debug_card_null, "Dictionary"));
         }
-    }
-
-    private void openExerciseActivity() {
-        Intent intent = new Intent(this, ExerciseActivity.class);
-        startActivity(intent);
-    }
-
-    private void openProfile() {
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
-    }
-
-    private void openDictionaryActivity() {
-        Intent intent = new Intent(this, DictionaryActivity.class);
-        startActivity(intent);
     }
 }

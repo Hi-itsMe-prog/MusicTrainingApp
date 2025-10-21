@@ -2,7 +2,7 @@ package com.example.musictrainingapp;
 
 import java.util.*;
 
-public class TrainingActivityNinthChords extends BaseTrainingActivity {
+public abstract class TrainingActivityNinthChords extends BaseTrainingActivity {
 
     private final String[] chordTypes = {"major9", "minor9", "dominant9"};
 

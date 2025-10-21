@@ -2,7 +2,7 @@ package com.example.musictrainingapp;
 
 import java.util.*;
 
-public class TrainingActivityTriads extends BaseTrainingActivity {
+public abstract class TrainingActivityTriads extends BaseTrainingActivity {
 
     private final String[] triadTypes = {"major", "minor", "diminished", "augmented"};
     private final String[] inversions = {"основное", "первое обращение", "второе обращение"};

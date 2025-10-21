@@ -28,9 +28,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     protected SimpleExercise currentExercise;
     protected Random random = new Random();
 
-    // Звук
-    protected SoundPool soundPool;
-    protected int[] pianoSounds;
 
     // Простая структура для упражнений
     public static class SimpleExercise {
@@ -62,7 +59,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         Intent intent = getIntent();
         String exerciseName = intent.getStringExtra("exercise_name");
 
-        initializeSoundPool();
         findViews();
         setupUI(exerciseName);
         exercises = generateExercises();
@@ -71,18 +67,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     // ОБЩИЕ МЕТОДЫ ДЛЯ ВСЕХ АКТИВНОСТЕЙ
-
-    protected void initializeSoundPool() {
-        soundPool = new SoundPool(6, AudioManager.STREAM_MUSIC, 0);
-        pianoSounds = new int[24];
-
-        for (int i = 0; i < 24; i++) {
-            int resourceId = getResources().getIdentifier("piano_" + (i + 1), "raw", getPackageName());
-            if (resourceId != 0) {
-                pianoSounds[i] = soundPool.load(this, resourceId, 1);
-            }
-        }
-    }
 
     protected void findViews() {
         tvExerciseTitle = findViewById(R.id.tvExerciseTitle);
@@ -119,7 +103,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     protected void showNextQuestion() {
-        if (currentQuestion >= totalQuestions) {
+        if (currentQuestion == totalQuestions) {
             finishExercise();
             return;
         }
@@ -130,7 +114,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         if (pianoKeyboard != null) {
             pianoKeyboard.clearSelection();
         }
-        updateSelectedNotesDisplay();
 
         // Показываем следующий вопрос
         currentExercise = exercises.get(currentQuestion);
@@ -156,15 +139,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     // ОБРАБОТКА НАЖАТИЙ КЛАВИШ
-    @Override
-    public void onNotePlayed(int noteIndex, String noteName) {
-        handleNoteSelection(noteIndex, noteName);
-
-        // Воспроизводим звук нажатой клавиши
-        if (noteIndex >= 0 && noteIndex < pianoSounds.length && pianoSounds[noteIndex] != 0) {
-            soundPool.play(pianoSounds[noteIndex], 1.0f, 1.0f, 1, 0, 1.0f);
-        }
-    }
 
     protected void handleNoteSelection(int noteIndex, String noteName) {
         // Если нота уже выбрана - убираем её
@@ -193,26 +167,8 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
                 pianoKeyboard.selectNote(noteIndex);
             }
         }
-
-        updateSelectedNotesDisplay();
     }
 
-    protected void updateSelectedNotesDisplay() {
-        if (tvSelectedNotes == null) return;
-
-        StringBuilder builder = new StringBuilder("Выбрано: ");
-        if (selectedNotes.isEmpty()) {
-            builder.append("ничего не выбрано");
-        } else {
-            for (int i = 0; i < selectedNotes.size(); i++) {
-                if (i > 0) builder.append(", ");
-                builder.append(selectedNotes.get(i));
-            }
-            builder.append(" (").append(selectedNotes.size()).append("/").append(getMaxNotes()).append(")");
-        }
-
-        tvSelectedNotes.setText(builder.toString());
-    }
 
 
 
@@ -276,13 +232,13 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
 
         selectedNotes.clear();
         selectedNoteIndexes.clear();
-        updateSelectedNotesDisplay();
 
         if (tvSelectedNotes != null) {
             tvSelectedNotes.setTextColor(ContextCompat.getColor(this, android.R.color.black));
         }
     }
 
+    /**кнопка перехода на следующий вопрос*/
     protected void nextQuestion() {
         currentQuestion++;
         showNextQuestion();
@@ -324,7 +280,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         }
     }
 
-    // УТИЛИТНЫЕ МЕТОДЫ ДЛЯ РАБОТЫ С НОТАМИ (общие для всех активностей)
+    // УТИЛИТНЫЕ МЕТОДЫ ДЛЯ РАБОТЫ С НОТАМИ
 
     protected int[] getNoteIndexes(String[] notes) {
         int[] indexes = new int[notes.length];
@@ -365,14 +321,5 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         if (targetIndex < 0) targetIndex += 12;
 
         return chromaticScale[targetIndex];
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (soundPool != null) {
-            soundPool.release();
-            soundPool = null;
-        }
     }
 }

@@ -2,7 +2,7 @@ package com.example.musictrainingapp;
 
 import java.util.*;
 
-public class TrainingIntervalsActivity extends BaseTrainingActivity {
+public abstract class TrainingIntervalsActivity extends BaseTrainingActivity {
 
     private final String[] intervalNames = {
             "малую секунду", "большую секунду", "малую терцию", "большую терцию",
@@ -68,8 +68,6 @@ public class TrainingIntervalsActivity extends BaseTrainingActivity {
         // Добавляем новую ноту в выбор
         selectedNotes.add(noteName);
         selectedNoteIndexes.add(noteIndex);
-
-        updateSelectedNotesDisplay();
     }
 
     // Переопределяем проверку для интервалов (учитываем порядок нот)
@@ -84,16 +82,4 @@ public class TrainingIntervalsActivity extends BaseTrainingActivity {
                 currentExercise.correctNotes);
     }
 
-    @Override
-    protected void updateSelectedNotesDisplay() {
-        if (tvSelectedNotes == null) return;
-
-
-        if (selectedNotes.size() == 2) {
-            int semitones = Math.abs(selectedNoteIndexes.get(1) - selectedNoteIndexes.get(0));
-
-        }
-
-
-    }
 }
