@@ -3,6 +3,7 @@ package com.example.musictrainingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -59,7 +60,7 @@ public class ResultsActivity extends AppCompatActivity {
         String message;
 
         if (percentage >= 90) {
-            message = "Отличный результат! Вы мастер интервалов!";
+            message = "Отличный результат!";
         } else if (percentage >= 70) {
             message = "Хорошая работа! Продолжайте в том же духе!";
         } else if (percentage >= 50) {

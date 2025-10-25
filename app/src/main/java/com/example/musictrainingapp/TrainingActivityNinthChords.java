@@ -1,10 +1,19 @@
 package com.example.musictrainingapp;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageButton;
+
 import java.util.*;
 
-public abstract class TrainingActivityNinthChords extends BaseTrainingActivity {
-
+public class TrainingActivityNinthChords extends BaseTrainingActivity {
+    private ImageButton backbut;
     private final String[] chordTypes = {"major9", "minor9", "dominant9"};
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeActivity(R.layout.activity_training_ninth_chords);
+    }
 
     @Override
     protected String getExerciseType() {
@@ -78,4 +87,5 @@ public abstract class TrainingActivityNinthChords extends BaseTrainingActivity {
             default: return "";
         }
     }
+
 }

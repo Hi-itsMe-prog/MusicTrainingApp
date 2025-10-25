@@ -285,7 +285,7 @@ public class PianoKeyboardView extends View {
 
     // Остальные методы остаются без изменений...
     /**
-     * Выделяет ноту на клавиатуре
+     * Выделяет ноты на клавиатуре
      */
     public void selectNote(int noteIndex) {
         viewModel.selectNote(noteIndex);

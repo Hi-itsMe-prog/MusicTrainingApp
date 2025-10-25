@@ -1,8 +1,9 @@
 package com.example.musictrainingapp;
 
+import android.os.Bundle;
 import java.util.*;
 
-public abstract class TrainingIntervalsActivity extends BaseTrainingActivity {
+public class TrainingIntervalsActivity extends BaseTrainingActivity {
 
     private final String[] intervalNames = {
             "малую секунду", "большую секунду", "малую терцию", "большую терцию",
@@ -11,6 +12,12 @@ public abstract class TrainingIntervalsActivity extends BaseTrainingActivity {
     };
 
     private final int[] intervalSemitones = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeActivity(R.layout.activity_training_intervals);
+    }
 
     @Override
     protected String getExerciseType() {
@@ -58,16 +65,25 @@ public abstract class TrainingIntervalsActivity extends BaseTrainingActivity {
     // Переопределяем логику выбора нот для интервалов (порядок важен)
     @Override
     protected void handleNoteSelection(int noteIndex, String noteName) {
-        // Очищаем предыдущий выбор, если уже выбрано 2 ноты
-        if (selectedNotes.size() >= 2) {
+        // Для интервалов порядок важен, поэтому очищаем при достижении максимума
+        if (selectedNotes.size() >= getMaxNotes()) {
             selectedNotes.clear();
             selectedNoteIndexes.clear();
-            pianoKeyboard.clearSelection();
+            if (pianoKeyboard != null) {
+                pianoKeyboard.clearSelection();
+            }
         }
 
         // Добавляем новую ноту в выбор
-        selectedNotes.add(noteName);
-        selectedNoteIndexes.add(noteIndex);
+        if (!selectedNoteIndexes.contains(noteIndex)) {
+            selectedNotes.add(noteName);
+            selectedNoteIndexes.add(noteIndex);
+            if (pianoKeyboard != null) {
+                pianoKeyboard.selectNote(noteIndex);
+            }
+        }
+
+        updateSelectedNotesDisplay();
     }
 
     // Переопределяем проверку для интервалов (учитываем порядок нот)
@@ -81,5 +97,4 @@ public abstract class TrainingIntervalsActivity extends BaseTrainingActivity {
         return Arrays.equals(selectedNotes.toArray(new String[0]),
                 currentExercise.correctNotes);
     }
-
 }

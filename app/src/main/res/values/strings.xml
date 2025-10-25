@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Tonika</string>
     <string name="exercise_type_intervals" translatable="false">intervals</string>
     <string name="exercise_type_chords" translatable="false">chords</string>
     <string name="exercise_type_seventh_chords" translatable="false">seventh_chords</string>
@@ -41,4 +42,6 @@
     
     <string name="card_exercises_description">Тренируйте интервалы, аккорды и многое другое</string>
     <string name="card_dictionary_description">Изучайте музыкальные термины и определения</string>
+
+    <string name="back_button"></string>
 </resources>

@@ -3,10 +3,13 @@ package com.example.musictrainingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ExerciseActivity extends AppCompatActivity {
 
+    private ImageButton backbut;
     private CustomButt2 cardIntervals, cardChords, cardSeventhChords, cardNinthChords, cardDictionary;
 
     @Override
@@ -17,6 +20,7 @@ public class ExerciseActivity extends AppCompatActivity {
         findViews();
         loadExerciseData();
         setupClickListeners();
+        setListeners();
     }
 
     private void findViews() {
@@ -26,6 +30,14 @@ public class ExerciseActivity extends AppCompatActivity {
         cardSeventhChords = findViewById(R.id.cardSeventhChords);
         cardNinthChords = findViewById(R.id.cardNinthChords);
         cardDictionary = findViewById(R.id.cardDictionary);
+        backbut = findViewById(R.id.backButton);
+    }
+    private void setListeners(){
+        backbut.setOnClickListener(v -> {
+            finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void loadExerciseData() {
@@ -74,7 +86,7 @@ public class ExerciseActivity extends AppCompatActivity {
     }
 
     private void startSpecificExercise(int cardId) {
-        Intent intent;
+        Intent intent = null;
         String exerciseType = "";
         String exerciseName = "";
 
@@ -82,33 +94,37 @@ public class ExerciseActivity extends AppCompatActivity {
             exerciseType = "intervals";
             exerciseName = "Интервалы";
             intent = new Intent(this, TrainingIntervalsActivity.class);
+            startActivity(intent);
         }
         else if (cardId == R.id.cardChords) {
             exerciseType = "chords";
             exerciseName = "Трезвучия";
             intent = new Intent(this, TrainingActivityTriads.class);
+            startActivity(intent);
         }
         else if (cardId == R.id.cardSeventhChords) {
             exerciseType = "seventh_chords";
             exerciseName = "Септаккорды";
             intent = new Intent(this, TrainingActivitySeventhChords.class);
+            startActivity(intent);
         }
         else if (cardId == R.id.cardNinthChords) {
             exerciseType = "ninth_chords";
             exerciseName = "Нонаккорды";
             intent = new Intent(this, TrainingActivityNinthChords.class);
+            startActivity(intent);
         }
         else if (cardId == R.id.cardDictionary) {
             exerciseType = "dictionary";
             exerciseName = "Словарь терминов";
             intent = new Intent(this, DictionaryActivity.class);
-        } else {
-            intent = new Intent(this, TrainingIntervalsActivity.class);
+            startActivity(intent);
         }
 
         intent.putExtra("exercise_type", exerciseType);
         intent.putExtra("exercise_name", exerciseName);
         startActivity(intent);
+
     }
 
     @Override

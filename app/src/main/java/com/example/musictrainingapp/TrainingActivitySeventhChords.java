@@ -1,11 +1,18 @@
 package com.example.musictrainingapp;
 
+import android.os.Bundle;
 import java.util.*;
 
-public abstract class TrainingActivitySeventhChords extends BaseTrainingActivity {
+public class TrainingActivitySeventhChords extends BaseTrainingActivity {
 
     private final String[] chordTypes = {"major7", "minor7", "dominant7", "half-diminished7", "diminished7"};
     private final String[] inversions = {"основное", "первое обращение", "второе обращение", "третье обращение"};
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initializeActivity(R.layout.activity_training_seventh_chords); // Исправлено: вызываем initializeActivity
+    }
 
     @Override
     protected String getExerciseType() {
@@ -91,5 +98,38 @@ public abstract class TrainingActivitySeventhChords extends BaseTrainingActivity
             case "diminished7": return "уменьшенный";
             default: return "";
         }
+    }
+
+    // Исправленная логика выбора нот для септаккордов
+    @Override
+    protected void handleNoteSelection(int noteIndex, String noteName) {
+        // Если нота уже выбрана - убираем её
+        if (selectedNoteIndexes.contains(noteIndex)) {
+            int index = selectedNoteIndexes.indexOf(noteIndex);
+            selectedNotes.remove(index);
+            selectedNoteIndexes.remove(index);
+            if (pianoKeyboard != null) {
+                pianoKeyboard.clearSelection(noteIndex);
+            }
+        } else {
+            // Если достигли максимума нот - убираем самую старую
+            if (selectedNotes.size() >= getMaxNotes()) {
+                int oldestIndex = selectedNoteIndexes.get(0);
+                selectedNotes.remove(0);
+                selectedNoteIndexes.remove(0);
+                if (pianoKeyboard != null) {
+                    pianoKeyboard.clearSelection(oldestIndex);
+                }
+            }
+
+            // Добавляем новую ноту
+            selectedNotes.add(noteName);
+            selectedNoteIndexes.add(noteIndex);
+            if (pianoKeyboard != null) {
+                pianoKeyboard.selectNote(noteIndex);
+            }
+        }
+
+        updateSelectedNotesDisplay();
     }
 }

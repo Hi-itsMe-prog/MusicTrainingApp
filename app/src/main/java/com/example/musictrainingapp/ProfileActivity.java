@@ -1,12 +1,15 @@
 package com.example.musictrainingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private ImageView backbut;
     private TextView tvUserName, tvUserEmail, tvTotalScore, tvTotalTime, tvAchievements;
 
     @Override
@@ -15,6 +18,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         findViews();
+        setListeners();
         loadProfileData();
     }
 
@@ -22,7 +26,16 @@ public class ProfileActivity extends AppCompatActivity {
         tvUserName = findViewById(R.id.tvUserName);
         tvUserEmail = findViewById(R.id.tvUserEmail);
         tvTotalScore = findViewById(R.id.tvTotalScore);
-        tvTotalTime = findViewById(R.id.tvTotalTime);;
+        tvTotalTime = findViewById(R.id.tvTotalTime);
+        backbut = findViewById(R.id.backButton);
+    }
+
+    private void setListeners() {
+        backbut.setOnClickListener(v -> {
+            finish();
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void loadProfileData() {
@@ -32,5 +45,4 @@ public class ProfileActivity extends AppCompatActivity {
         tvTotalTime.setText("Общее время: 15 ч");
         tvAchievements.setText("Получено: 3/10");
     }
-
 }

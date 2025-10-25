@@ -1,10 +1,9 @@
 package com.example.musictrainingapp;
 
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.SoundPool;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -17,6 +16,8 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     protected TextView tvExerciseTitle, tvQuestion, tvSelectedNotes, tvProgress, tvScore;
     protected PianoKeyboardView pianoKeyboard;
     protected Button btnPlaySound, btnCheckAnswer, btnClear, btnNext;
+    protected ImageButton backbut;
+    protected Bundle savedInstanceState;
 
     // Общие переменные состояния
     protected int currentQuestion = 0;
@@ -27,7 +28,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     protected List<SimpleExercise> exercises = new ArrayList<>();
     protected SimpleExercise currentExercise;
     protected Random random = new Random();
-
 
     // Простая структура для упражнений
     public static class SimpleExercise {
@@ -40,6 +40,24 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
             this.correctNotes = correctNotes;
             this.correctNoteIndexes = correctNoteIndexes;
         }
+    }
+    protected String[] getChordNotesWithCorrectVoicing(String rootNote, String chordType) {
+        // Этот метод будет переопределяться в дочерних классах
+        return new String[]{rootNote};
+    }
+
+    protected int getNoteIndexOnKeyboard(String noteName) {
+        String[] keyboardNotes = {
+                "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+                "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+        };
+
+        for (int i = 0; i < keyboardNotes.length; i++) {
+            if (keyboardNotes[i].equals(noteName)) {
+                return i;
+            }
+        }
+        return 0;
     }
 
     // Абстрактные методы, которые должны реализовать дочерние классы
@@ -54,12 +72,18 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_training_intervals);
+        // Каждый наследник должен устанавливать свой layout
+        // setContentView вызывается в наследниках
+    }
+
+    protected void initializeActivity(int layoutResId) {
+        setContentView(layoutResId);
 
         Intent intent = getIntent();
         String exerciseName = intent.getStringExtra("exercise_name");
 
         findViews();
+        setListeners();
         setupUI(exerciseName);
         exercises = generateExercises();
         setupButtonListeners();
@@ -67,7 +91,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     // ОБЩИЕ МЕТОДЫ ДЛЯ ВСЕХ АКТИВНОСТЕЙ
-
     protected void findViews() {
         tvExerciseTitle = findViewById(R.id.tvExerciseTitle);
         tvQuestion = findViewById(R.id.tvQuestion);
@@ -79,10 +102,21 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         btnCheckAnswer = findViewById(R.id.btnCheckAnswer);
         btnClear = findViewById(R.id.btnClear);
         btnNext = findViewById(R.id.btnNext);
+        backbut = findViewById(R.id.backButton);
 
-        pianoKeyboard.setOnNotePlayedListener(this);
+        if (pianoKeyboard != null) {
+            pianoKeyboard.setOnNotePlayedListener(this);
+        }
     }
 
+    private void setListeners(){
+        backbut.setOnClickListener(v -> {
+            // Завершаем текущую активити и возвращаемся назад
+            finish();
+            Intent intent = new Intent(this, ExerciseActivity.class);
+            startActivity(intent);
+        });
+    }
     protected void setupUI(String exerciseName) {
         if (tvExerciseTitle != null) {
             tvExerciseTitle.setText(exerciseName);
@@ -103,7 +137,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     protected void showNextQuestion() {
-        if (currentQuestion == totalQuestions) {
+        if (currentQuestion >= totalQuestions || currentQuestion >= exercises.size()) {
             finishExercise();
             return;
         }
@@ -120,6 +154,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         if (tvQuestion != null) {
             tvQuestion.setText(currentExercise.question);
         }
+        updateSelectedNotesDisplay();
         updateProgress();
 
         // Обновляем состояние кнопок
@@ -139,6 +174,10 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     // ОБРАБОТКА НАЖАТИЙ КЛАВИШ
+    @Override
+    public void onNotePlayed(int noteIndex, String noteName) {
+        handleNoteSelection(noteIndex, noteName);
+    }
 
     protected void handleNoteSelection(int noteIndex, String noteName) {
         // Если нота уже выбрана - убираем её
@@ -167,10 +206,19 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
                 pianoKeyboard.selectNote(noteIndex);
             }
         }
+
+        updateSelectedNotesDisplay();
     }
 
-
-
+    protected void updateSelectedNotesDisplay() {
+        if (tvSelectedNotes != null) {
+            StringBuilder sb = new StringBuilder("Выбрано: ");
+            for (String note : selectedNotes) {
+                sb.append(note).append(" ");
+            }
+            tvSelectedNotes.setText(sb.toString().trim());
+        }
+    }
 
     // ПРОВЕРКА ОТВЕТА
     protected void checkAnswer() {
@@ -181,7 +229,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
                 score++;
                 updateScore();
                 tvSelectedNotes.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
-                tvSelectedNotes.setText("✓ Правильно! " + tvSelectedNotes.getText());
+                tvSelectedNotes.setText("✓ Правильно! " + getSelectedNotesText());
             } else {
                 tvSelectedNotes.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
 
@@ -206,8 +254,16 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         }
     }
 
+    protected String getSelectedNotesText() {
+        StringBuilder sb = new StringBuilder();
+        for (String note : selectedNotes) {
+            sb.append(note).append(" ");
+        }
+        return sb.toString().trim();
+    }
+
     protected boolean checkIfAnswerCorrect() {
-        if (selectedNotes.size() != getMaxNotes()) {
+        if (selectedNotes.size() != currentExercise.correctNotes.length) {
             return false;
         }
 
@@ -232,6 +288,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
 
         selectedNotes.clear();
         selectedNoteIndexes.clear();
+        updateSelectedNotesDisplay();
 
         if (tvSelectedNotes != null) {
             tvSelectedNotes.setTextColor(ContextCompat.getColor(this, android.R.color.black));
@@ -252,7 +309,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
 
     protected void updateScore() {
         if (tvScore != null) {
-            tvScore.setText(String.format("Счёт: %d/%d", score, currentQuestion + 1));
+            tvScore.setText(String.format("Счёт: %d/%d", score, currentQuestion));
         }
     }
 
@@ -266,7 +323,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     protected void setupButtonListeners() {
-
         if (btnCheckAnswer != null) {
             btnCheckAnswer.setOnClickListener(v -> checkAnswer());
         }
@@ -281,7 +337,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     }
 
     // УТИЛИТНЫЕ МЕТОДЫ ДЛЯ РАБОТЫ С НОТАМИ
-
     protected int[] getNoteIndexes(String[] notes) {
         int[] indexes = new int[notes.length];
         for (int i = 0; i < notes.length; i++) {
@@ -290,19 +345,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         return indexes;
     }
 
-    protected int getNoteIndexOnKeyboard(String noteName) {
-        String[] keyboardNotes = {
-                "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
-                "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
-        };
-
-        for (int i = 0; i < keyboardNotes.length; i++) {
-            if (keyboardNotes[i].equals(noteName)) {
-                return i;
-            }
-        }
-        return 0;
-    }
 
     protected String getNoteByInterval(String baseNote, int semitones) {
         String[] chromaticScale = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
