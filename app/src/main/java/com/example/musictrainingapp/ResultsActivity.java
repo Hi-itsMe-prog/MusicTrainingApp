@@ -33,7 +33,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        btnRestart.setOnClickListener(v -> restartExercise());
+        btnRestart.setOnClickListener(v -> BackToExercise());
         btnMainMenu.setOnClickListener(v -> returnToMainMenu());
     }
 
@@ -72,9 +72,9 @@ public class ResultsActivity extends AppCompatActivity {
         tvResultMessage.setText(message);
     }
 
-    private void restartExercise() {
+    private void BackToExercise() {
         Intent intent = getIntent();
-        Intent newIntent = new Intent(this, TrainingIntervalsActivity.class);
+        Intent newIntent = new Intent(this, ExerciseActivity.class);
         newIntent.putExtra("exercise_type", intent.getStringExtra("exercise_type"));
         newIntent.putExtra("exercise_name", getExerciseName(intent.getStringExtra("exercise_type")));
         startActivity(newIntent);

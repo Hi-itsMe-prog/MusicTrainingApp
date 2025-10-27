@@ -22,7 +22,7 @@
     <string name="title_choose_exercise">Выберите упражнение</string>
 
     <string name="welcome_message">Добро пожаловать, %s!</string>
-    <string name="default_username">Алексей</string>
+    <string name="default_username">Гость</string>
 
     <string name="progress_percent">%d%%</string>
     <string name="accuracy_percent">%d%%</string>
@@ -39,7 +39,7 @@
 
     <string name="card_exercises_title">Упражнения</string>
     <string name="card_dictionary_title">Словарь</string>
-    
+
     <string name="card_exercises_description">Тренируйте интервалы, аккорды и многое другое</string>
     <string name="card_dictionary_description">Изучайте музыкальные термины и определения</string>
 

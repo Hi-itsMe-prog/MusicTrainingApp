@@ -5,12 +5,19 @@ import java.util.*;
 
 public class TrainingActivityTriads extends BaseTrainingActivity {
 
-    // Предопределенные типы трезвучий с обращениями
+    // Типы трезвучий (только основные, обращения будем генерировать)
     private final String[] triadTypes = {
-            "major", "major6", "major64",        // мажор: основное, 1 обращение, 2 обращение
-            "minor", "minor6", "minor64",        // минор: основное, 1 обращение, 2 обращение
-            "dim", "dim6", "dim64",            // уменьшенное: основное, 1 обращение, 2 обращение
-            "aug", "aug6", "aug64"            // увеличенное: основное, 1 обращение, 2 обращение
+            "major",    // мажорное
+            "minor",    // минорное
+            "dim",      // уменьшенное
+            "aug"       // увеличенное
+    };
+
+    // Типы обращений
+    private final String[] inversionTypes = {
+            "root",     // основное положение
+            "first",    // первое обращение (секстаккорд)
+            "second"    // второе обращение (квартсекстаккорд)
     };
 
     @Override
@@ -41,13 +48,15 @@ public class TrainingActivityTriads extends BaseTrainingActivity {
         for (int i = 0; i < totalQuestions; i++) {
             String rootNote = baseNotes[random.nextInt(baseNotes.length)];
             String triadType = triadTypes[random.nextInt(triadTypes.length)];
+            String inversionType = inversionTypes[random.nextInt(inversionTypes.length)];
 
-            // Генерируем правильные ноты для трезвучия
-            String[] correctNotes = getChordNotesWithCorrectVoicing(rootNote, triadType);
+            // Генерируем правильные ноты для трезвучия с обращением
+            ChordData chordData = getChordNotesWithInversion(rootNote, triadType, inversionType);
+            String[] correctNotes = chordData.notes;
             int[] correctNoteIndexes = getNoteIndexes(correctNotes);
 
             String question = String.format("Постройте %s от ноты %s",
-                    getTriadDisplayName(triadType), rootNote);
+                    chordData.displayName, chordData.bassNote);
 
             exercises.add(new SimpleExercise(question, correctNotes, correctNoteIndexes));
         }
@@ -55,117 +64,139 @@ public class TrainingActivityTriads extends BaseTrainingActivity {
         return exercises;
     }
 
-    @Override
-    protected String[] getChordNotesWithCorrectVoicing(String rootNote, String chordType) {
-        switch (chordType) {
-            // Мажорные трезвучия
-            case "major":
+    private ChordData getChordNotesWithInversion(String rootNote, String triadType, String inversionType) {
+        // Сначала получаем трезвучие в основном положении
+        String[] rootPosition = getTriadRootPosition(rootNote, triadType);
+
+        // Затем применяем обращение и получаем басовую ноту
+        ChordInversionResult inversionResult = applyInversion(rootPosition, inversionType);
+
+        // Формируем отображаемое название
+        String displayName = getTriadDisplayName(triadType, inversionType);
+
+        return new ChordData(inversionResult.notes, inversionResult.bassNote, displayName);
+    }
+
+    private String[] getTriadRootPosition(String rootNote, String triadType) {
+        switch (triadType) {
+            case "major": // большая терция + малая терция
                 return new String[]{
                         rootNote,
-                        getNoteByInterval(rootNote, 4),
-                        getNoteByInterval(rootNote, 7)
+                        getNoteByInterval(rootNote, 4), // большая терция
+                        getNoteByInterval(rootNote, 7)  // малая терция (чистая квинта)
                 };
-            case "major6":
-                return new String[]{
-                        getNoteByInterval(rootNote, 4), // начинается с терции
-                        getNoteByInterval(rootNote, 7),
-                        getNoteByInterval(rootNote, 12)
-                };
-            case "major64": // Соль-До-Ми (от Соль - квартсекстаккорд)
-                return new String[]{
-                        getNoteByInterval(rootNote, 7), // начинается с квинты
-                        getNoteByInterval(rootNote, 12),
-                        getNoteByInterval(getNoteByInterval(rootNote, 4), 12)
-                };
-
-            // Минорные трезвучия
-            case "minor":
+            case "minor": // малая терция + большая терция
                 return new String[]{
                         rootNote,
-                        getNoteByInterval(rootNote, 3),
-                        getNoteByInterval(rootNote, 7)
+                        getNoteByInterval(rootNote, 3), // малая терция
+                        getNoteByInterval(rootNote, 7)  // большая терция (чистая квинта)
                 };
-            case "minor6":
-                return new String[]{
-                        getNoteByInterval(rootNote, 3), // начинается с терции
-                        getNoteByInterval(rootNote, 7),
-                        getNoteByInterval(rootNote, 12)
-                };
-            case "minor64":
-                return new String[]{
-                        getNoteByInterval(rootNote, 7), // начинается с квинты
-                        getNoteByInterval(rootNote, 12),
-                        getNoteByInterval(getNoteByInterval(rootNote, 3), 12)
-                };
-
-            // Уменьшенные трезвучия
-            case "dim":
+            case "dim": // малая терция + малая терция
                 return new String[]{
                         rootNote,
-                        getNoteByInterval(rootNote, 3),
-                        getNoteByInterval(rootNote, 6)
+                        getNoteByInterval(rootNote, 3), // малая терция
+                        getNoteByInterval(rootNote, 6)  // малая терция (уменьшенная квинта)
                 };
-            case "dim6":
-                return new String[]{
-                        getNoteByInterval(rootNote, 3), // начинается с терции
-                        getNoteByInterval(rootNote, 6),
-                        getNoteByInterval(rootNote, 12)
-                };
-            case "dim64":
-                return new String[]{
-                        getNoteByInterval(rootNote, 6), // начинается с квинты
-                        getNoteByInterval(rootNote, 12),
-                        getNoteByInterval(getNoteByInterval(rootNote, 3), 12)
-                };
-
-            // Увеличенные трезвучия
-            case "aug":
+            case "aug": // большая терция + большая терция
                 return new String[]{
                         rootNote,
-                        getNoteByInterval(rootNote, 4),
-                        getNoteByInterval(rootNote, 8)
+                        getNoteByInterval(rootNote, 4), // большая терция
+                        getNoteByInterval(rootNote, 8)  // большая терция (увеличенная квинта)
                 };
-            case "aug6": // начало через большую терцию от rootNote
-                return new String[]{
-                        getNoteByInterval(rootNote, 4),
-                        getNoteByInterval(rootNote, 8),
-                        getNoteByInterval(rootNote, 12)
-                };
-            case "aug64": // начало через ув квинту от rootNote
-                return new String[]{
-                        getNoteByInterval(rootNote, 8),
-                        getNoteByInterval(rootNote, 12),
-                        getNoteByInterval(getNoteByInterval(rootNote, 4), 12)
-                };
-
             default:
-                return new String[]{rootNote};
+                return new String[]{rootNote, rootNote, rootNote};
         }
     }
 
-    private String getTriadDisplayName(String triadType) {
-        switch (triadType) {
-            // Мажорные
-            case "major": return "мажорное трезвучие";
-            case "major6": return "мажорный секстаккорд";
-            case "major64": return "мажорный квартсекстаккорд";
+    private ChordInversionResult applyInversion(String[] chordNotes, String inversionType) {
+        String bassNote;
+        String[] notes;
 
-            // Минорные
-            case "minor": return "минорное трезвучие";
-            case "minor6": return "минорный секстаккорд";
-            case "minor64": return "минорный квартсекстаккорд";
+        switch (inversionType) {
+            case "root": // основное положение: прима - терция - квинта
+                bassNote = chordNotes[0]; // бас - прима
+                notes = new String[]{
+                        chordNotes[0],
+                        chordNotes[1],
+                        chordNotes[2]
+                };
+                break;
 
-            // Уменьшенные
-            case "dim": return "уменьшенное трезвучие";
-            case "dim6": return "уменьшенный секстаккорд";
-            case "dim64": return "уменьшенный квартсекстаккорд";
+            case "first": // первое обращение (секстаккорд): терция - квинта - прима(+октава)
+                bassNote = chordNotes[1]; // бас - терция
+                notes = new String[]{
+                        chordNotes[1],
+                        chordNotes[2],
+                        getNoteByInterval(chordNotes[0], 12) // прима на октаву выше
+                };
+                break;
 
-            // Увеличенные
-            case "aug": return "увеличенное трезвучие";
-            case "aug6": return "увеличенный секстаккорд";
-            case "aug64": return "увеличенный квартсекстаккорд";
+            case "second": // второе обращение (квартсекстаккорд): квинта - прима(+октава) - терция(+октава)
+                bassNote = chordNotes[2]; // бас - квинта
+                notes = new String[]{
+                        chordNotes[2],
+                        getNoteByInterval(chordNotes[0], 12), // прима на октаву выше
+                        getNoteByInterval(chordNotes[1], 12)  // терция на октаву выше
+                };
+                break;
 
-            default: return "трезвучие";
+            default:
+                bassNote = chordNotes[0];
+                notes = chordNotes;
         }
+
+        return new ChordInversionResult(notes, bassNote);
+    }
+
+    private String getTriadDisplayName(String triadType, String inversionType) {
+        String triadName = "";
+        String inversionName = "";
+
+        // Название трезвучия
+        switch (triadType) {
+            case "major": triadName = "мажорное"; break;
+            case "minor": triadName = "минорное"; break;
+            case "dim": triadName = "уменьшенное"; break;
+            case "aug": triadName = "увеличенное"; break;
+        }
+
+        // Название обращения
+        switch (inversionType) {
+            case "root": inversionName = "трезвучие"; break;
+            case "first": inversionName = "секстаккорд"; break;
+            case "second": inversionName = "квартсекстаккорд"; break;
+        }
+
+        return triadName + " " + inversionName;
+    }
+
+    // Вспомогательные классы для хранения данных аккорда
+    private static class ChordData {
+        String[] notes;
+        String bassNote;
+        String displayName;
+
+        ChordData(String[] notes, String bassNote, String displayName) {
+            this.notes = notes;
+            this.bassNote = bassNote;
+            this.displayName = displayName;
+        }
+    }
+
+    private static class ChordInversionResult {
+        String[] notes;
+        String bassNote;
+
+        ChordInversionResult(String[] notes, String bassNote) {
+            this.notes = notes;
+            this.bassNote = bassNote;
+        }
+    }
+
+    // Старый метод для обратной совместимости
+    @Override
+    protected String[] getChordNotesWithCorrectVoicing(String rootNote, String chordType) {
+        // Для простоты используем только основное положение
+        return getTriadRootPosition(rootNote, "major");
     }
 }

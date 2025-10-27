@@ -5,13 +5,27 @@ import java.util.*;
 
 public class TrainingActivitySeventhChords extends BaseTrainingActivity {
 
-    private final String[] chordTypes = {"major7", "minor7", "dominant7", "half-diminished7", "diminished7"};
-    private final String[] inversions = {"основное", "первое обращение", "второе обращение", "третье обращение"};
+    // Типы септаккордов
+    private final String[] chordTypes = {
+            "major7",           // большой мажорный
+            "minor7",           // малый минорный
+            "dominant7",        // доминантовый
+            "half-diminished7", // полууменьшенный
+            "diminished7"       // уменьшенный
+    };
+
+    // Типы обращений
+    private final String[] inversionTypes = {
+            "root",     // основное положение
+            "first",    // первое обращение (квинтсекстаккорд)
+            "second",   // второе обращение (терцквартаккорд)
+            "third"     // третье обращение (секундаккорд)
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initializeActivity(R.layout.activity_training_seventh_chords); // Исправлено: вызываем initializeActivity
+        initializeActivity(R.layout.activity_training_seventh_chords);
     }
 
     @Override
@@ -36,14 +50,15 @@ public class TrainingActivitySeventhChords extends BaseTrainingActivity {
         for (int i = 0; i < totalQuestions; i++) {
             String rootNote = baseNotes[random.nextInt(baseNotes.length)];
             String chordType = chordTypes[random.nextInt(chordTypes.length)];
-            String inversion = inversions[random.nextInt(inversions.length)];
+            String inversionType = inversionTypes[random.nextInt(inversionTypes.length)];
 
-            // Генерируем правильные ноты для септаккорда
-            String[] correctNotes = generateSeventhChordNotes(rootNote, chordType, inversion);
+            // Генерируем правильные ноты для септаккорда с обращением
+            ChordData chordData = getChordNotesWithInversion(rootNote, chordType, inversionType);
+            String[] correctNotes = chordData.notes;
             int[] correctNoteIndexes = getNoteIndexes(correctNotes);
 
-            String question = String.format("Постройте %s %s септаккорд от ноты %s",
-                    inversion, getChordTypeName(chordType), rootNote);
+            String question = String.format("Постройте %s от ноты %s",
+                    chordData.displayName, chordData.bassNote);
 
             exercises.add(new SimpleExercise(question, correctNotes, correctNoteIndexes));
         }
@@ -51,85 +66,165 @@ public class TrainingActivitySeventhChords extends BaseTrainingActivity {
         return exercises;
     }
 
-    private String[] generateSeventhChordNotes(String rootNote, String chordType, String inversion) {
-        int[] intervals;
+    private ChordData getChordNotesWithInversion(String rootNote, String chordType, String inversionType) {
+        // Сначала получаем септаккорд в основном положении
+        String[] rootPosition = getSeventhChordRootPosition(rootNote, chordType);
+
+        // Затем применяем обращение и получаем басовую ноту
+        ChordInversionResult inversionResult = applyInversion(rootPosition, inversionType);
+
+        // Формируем отображаемое название
+        String displayName = getSeventhChordDisplayName(chordType, inversionType);
+
+        return new ChordData(inversionResult.notes, inversionResult.bassNote, displayName);
+    }
+
+    private String[] getSeventhChordRootPosition(String rootNote, String chordType) {
         switch (chordType) {
-            case "major7":
-                intervals = new int[]{4, 7, 11}; // мажорное трезвучие + большая септима
-                break;
-            case "minor7":
-                intervals = new int[]{3, 7, 10}; // минорное трезвучие + малая септима
-                break;
-            case "dominant7":
-                intervals = new int[]{4, 7, 10}; // мажорное трезвучие + малая септима
-                break;
-            case "half-diminished7":
-                intervals = new int[]{3, 6, 10}; // уменьшенное трезвучие + малая септима
-                break;
-            case "diminished7":
-                intervals = new int[]{3, 6, 9}; // уменьшенное трезвучие + уменьшенная септима
-                break;
+            case "major7": // мажорное трезвучие + большая септима
+                return new String[]{
+                        rootNote,
+                        getNoteByInterval(rootNote, 4),  // большая терция
+                        getNoteByInterval(rootNote, 7),  // чистая квинта
+                        getNoteByInterval(rootNote, 11)  // большая септима
+                };
+            case "minor7": // минорное трезвучие + малая септима
+                return new String[]{
+                        rootNote,
+                        getNoteByInterval(rootNote, 3),  // малая терция
+                        getNoteByInterval(rootNote, 7),  // чистая квинта
+                        getNoteByInterval(rootNote, 10)  // малая септима
+                };
+            case "dominant7": // мажорное трезвучие + малая септима
+                return new String[]{
+                        rootNote,
+                        getNoteByInterval(rootNote, 4),  // большая терция
+                        getNoteByInterval(rootNote, 7),  // чистая квинта
+                        getNoteByInterval(rootNote, 10)  // малая септима
+                };
+            case "half-diminished7": // уменьшенное трезвучие + малая септима
+                return new String[]{
+                        rootNote,
+                        getNoteByInterval(rootNote, 3),  // малая терция
+                        getNoteByInterval(rootNote, 6),  // уменьшенная квинта
+                        getNoteByInterval(rootNote, 10)  // малая септима
+                };
+            case "diminished7": // уменьшенное трезвучие + уменьшенная септима
+                return new String[]{
+                        rootNote,
+                        getNoteByInterval(rootNote, 3),  // малая терция
+                        getNoteByInterval(rootNote, 6),  // уменьшенная квинта
+                        getNoteByInterval(rootNote, 9)   // уменьшенная септима
+                };
             default:
-                intervals = new int[]{4, 7, 10};
-        }
-
-        String thirdNote = getNoteByInterval(rootNote, intervals[0]);
-        String fifthNote = getNoteByInterval(rootNote, intervals[1]);
-        String seventhNote = getNoteByInterval(rootNote, intervals[2]);
-
-        switch (inversion) {
-            case "первое обращение":
-                return new String[]{thirdNote, fifthNote, seventhNote, getNoteByInterval(rootNote, 12)};
-            case "второе обращение":
-                return new String[]{fifthNote, seventhNote, getNoteByInterval(rootNote, 12), getNoteByInterval(thirdNote, 12)};
-            case "третье обращение":
-                return new String[]{seventhNote, getNoteByInterval(rootNote, 12), getNoteByInterval(thirdNote, 12), getNoteByInterval(fifthNote, 12)};
-            default:
-                return new String[]{rootNote, thirdNote, fifthNote, seventhNote};
+                return new String[]{rootNote, rootNote, rootNote, rootNote};
         }
     }
 
-    private String getChordTypeName(String chordType) {
+    private ChordInversionResult applyInversion(String[] chordNotes, String inversionType) {
+        String bassNote;
+        String[] notes;
+
+        switch (inversionType) {
+            case "root": // основное положение: прима - терция - квинта - септима
+                bassNote = chordNotes[0]; // бас - прима
+                notes = new String[]{
+                        chordNotes[0],
+                        chordNotes[1],
+                        chordNotes[2],
+                        chordNotes[3]
+                };
+                break;
+
+            case "first": // первое обращение (квинтсекстаккорд): терция - квинта - септима - прима(+октава)
+                bassNote = chordNotes[1]; // бас - терция
+                notes = new String[]{
+                        chordNotes[1],
+                        chordNotes[2],
+                        chordNotes[3],
+                        getNoteByInterval(chordNotes[0], 12) // прима на октаву выше
+                };
+                break;
+
+            case "second": // второе обращение (терцквартаккорд): квинта - септима - прима(+октава) - терция(+октава)
+                bassNote = chordNotes[2]; // бас - квинта
+                notes = new String[]{
+                        chordNotes[2],
+                        chordNotes[3],
+                        getNoteByInterval(chordNotes[0], 12), // прима на октаву выше
+                        getNoteByInterval(chordNotes[1], 12)  // терция на октаву выше
+                };
+                break;
+
+            case "third": // третье обращение (секундаккорд): септима - прима(+октава) - терция(+октава) - квинта(+октава)
+                bassNote = chordNotes[3]; // бас - септима
+                notes = new String[]{
+                        chordNotes[3],
+                        getNoteByInterval(chordNotes[0], 12), // прима на октаву выше
+                        getNoteByInterval(chordNotes[1], 12), // терция на октаву выше
+                        getNoteByInterval(chordNotes[2], 12)  // квинта на октаву выше
+                };
+                break;
+
+            default:
+                bassNote = chordNotes[0];
+                notes = chordNotes;
+        }
+
+        return new ChordInversionResult(notes, bassNote);
+    }
+
+    private String getSeventhChordDisplayName(String chordType, String inversionType) {
+        String chordName = "";
+        String inversionName = "";
+
+        // Название септаккорда
         switch (chordType) {
-            case "major7": return "большой мажорный";
-            case "minor7": return "малый минорный";
-            case "dominant7": return "доминантовый";
-            case "half-diminished7": return "полууменьшенный";
-            case "diminished7": return "уменьшенный";
-            default: return "";
+            case "major7": chordName = "большой мажорный"; break;
+            case "minor7": chordName = "малый минорный"; break;
+            case "dominant7": chordName = "доминантовый"; break;
+            case "half-diminished7": chordName = "полууменьшенный"; break;
+            case "diminished7": chordName = "уменьшенный"; break;
+        }
+
+        // Название обращения
+        switch (inversionType) {
+            case "root": inversionName = "септаккорд"; break;
+            case "first": inversionName = "квинтсекстаккорд"; break;
+            case "second": inversionName = "терцквартаккорд"; break;
+            case "third": inversionName = "секундаккорд"; break;
+        }
+
+        return chordName + " " + inversionName;
+    }
+
+    // Вспомогательные классы для хранения данных аккорда
+    private static class ChordData {
+        String[] notes;
+        String bassNote;
+        String displayName;
+
+        ChordData(String[] notes, String bassNote, String displayName) {
+            this.notes = notes;
+            this.bassNote = bassNote;
+            this.displayName = displayName;
         }
     }
 
-    // Исправленная логика выбора нот для септаккордов
+    private static class ChordInversionResult {
+        String[] notes;
+        String bassNote;
+
+        ChordInversionResult(String[] notes, String bassNote) {
+            this.notes = notes;
+            this.bassNote = bassNote;
+        }
+    }
+
+    // Старый метод для обратной совместимости
     @Override
-    protected void handleNoteSelection(int noteIndex, String noteName) {
-        // Если нота уже выбрана - убираем её
-        if (selectedNoteIndexes.contains(noteIndex)) {
-            int index = selectedNoteIndexes.indexOf(noteIndex);
-            selectedNotes.remove(index);
-            selectedNoteIndexes.remove(index);
-            if (pianoKeyboard != null) {
-                pianoKeyboard.clearSelection(noteIndex);
-            }
-        } else {
-            // Если достигли максимума нот - убираем самую старую
-            if (selectedNotes.size() >= getMaxNotes()) {
-                int oldestIndex = selectedNoteIndexes.get(0);
-                selectedNotes.remove(0);
-                selectedNoteIndexes.remove(0);
-                if (pianoKeyboard != null) {
-                    pianoKeyboard.clearSelection(oldestIndex);
-                }
-            }
-
-            // Добавляем новую ноту
-            selectedNotes.add(noteName);
-            selectedNoteIndexes.add(noteIndex);
-            if (pianoKeyboard != null) {
-                pianoKeyboard.selectNote(noteIndex);
-            }
-        }
-
-        updateSelectedNotesDisplay();
+    protected String[] getChordNotesWithCorrectVoicing(String rootNote, String chordType) {
+        // Для простоты используем только основное положение
+        return getSeventhChordRootPosition(rootNote, "major7");
     }
 }

@@ -72,8 +72,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Каждый наследник должен устанавливать свой layout
-        // setContentView вызывается в наследниках
     }
 
     protected void initializeActivity(int layoutResId) {
@@ -98,7 +96,6 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
         tvProgress = findViewById(R.id.tvProgress);
         tvScore = findViewById(R.id.tvScore);
         pianoKeyboard = findViewById(R.id.pianoKeyboard);
-        btnPlaySound = findViewById(R.id.btnPlaySound);
         btnCheckAnswer = findViewById(R.id.btnCheckAnswer);
         btnClear = findViewById(R.id.btnClear);
         btnNext = findViewById(R.id.btnNext);
@@ -309,7 +306,7 @@ public abstract class BaseTrainingActivity extends AppCompatActivity
 
     protected void updateScore() {
         if (tvScore != null) {
-            tvScore.setText(String.format("Счёт: %d/%d", score, currentQuestion));
+            tvScore.setText(String.format("Счёт: %d", score));
         }
     }
 
